@@ -43,8 +43,11 @@ Eventify enables users to:
 git clone https://github.com/roksanadilshad/Event_Management_Next.git
 cd event-management
 
+```
 2. **Install dependencies:**
 npm install
+
+
 3. **Configure environment variables:**
 
 Create a .env.local file in the root and add:
@@ -57,6 +60,8 @@ NEXT_PUBLIC_FIREBASE_APP_ID=<your-firebase-app-id>
 
 MONGODB_URI=<your-mongodb-connection-string>
 
+
+
 4. **Run the development server:**
 npm run dev
 
@@ -68,7 +73,7 @@ npm run dev
 Open http://localhost:3000
  to see your app.
 
-- Available Routes
+## Available Routes
 
 | Route              | Description                                   |
 | ------------------ | --------------------------------------------- |
@@ -81,26 +86,28 @@ Open http://localhost:3000
 
 Note: All protected routes require the user to be authenticated. Non-authenticated users are redirected to /login.
 
+---
 
-Technologies Used
+### Technologies Used
 
-Next.js 16 – React framework for server-side rendering and static site generation
+- Next.js 16 – React framework for server-side rendering and static site generation
 
-React 19 – Frontend library for building UI
+- React 19 – Frontend library for building UI
 
-Firebase 12 – Authentication and real-time services
+- Firebase 12 – Authentication and real-time services
 
-MongoDB 7 – Database for storing events
+- MongoDB 7 – Database for storing events
 
-Tailwind CSS 4 – Styling framework
+- Tailwind CSS 4 – Styling framework
 
-React Hot Toast – Notifications
+- React Hot Toast – Notifications
 
-SweetAlert2 – Interactive alert modals
+- SweetAlert2 – Interactive alert modals
 
-Swiper – Slider/Carousel components
+- Swiper – Slider/Carousel components
 
-Framer Motion – Animations
+- Framer Motion – Animations
 
+---
 
-Website live link: https://event-management-next-fscg.vercel.app/
+# Website live link: https://event-management-next-fscg.vercel.app/
