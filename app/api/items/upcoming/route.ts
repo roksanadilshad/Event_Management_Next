@@ -18,7 +18,7 @@ export async function GET() {
       itemsCollection
         .find({ date: { $gte: today } })
         .sort({ date: 1 })
-        .limit(6)
+        .limit(5)
         .toArray(),
       newEventsCollection
         .find({ date: { $gte: today } })
