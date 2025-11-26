@@ -9,14 +9,15 @@ interface BookNowButtonProps {
   eventTitle: string;
 }
 
-export default function BookNowButton({ eventTitle }: BookNowButtonProps) {
+export default function BookNowButton({eventId, eventTitle }: BookNowButtonProps) {
   const [booked, setBooked] = useState(false);
    const { user } = useAuth();
   const router = useRouter();
+  
 
   const handleBooking = () => {
     if (!user) {
-      router.push("/login");
+      router.push(`/login?redirect=/items/${eventId}`);
       return;
     }
     setBooked(true);

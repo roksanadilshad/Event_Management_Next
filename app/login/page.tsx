@@ -3,15 +3,18 @@
 import { useState } from "react";
 import { auth } from "@/lib/firebase";
 import { signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import toast, { Toaster } from "react-hot-toast";
 import { motion } from "framer-motion";
 import { FcGoogle } from "react-icons/fc";
+
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
+  const searchParams = useSearchParams(); 
+  const redirect = searchParams.get("redirect") || "/"; 
   const [loading, setLoading] = useState(false);
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -20,7 +23,7 @@ export default function LoginPage() {
     try {
       await signInWithEmailAndPassword(auth, email, password);
       toast.success("Logged in successfully!");
-      router.push("/");
+      router.push(redirect);
     } catch (err: any) {
       toast.error("Login failed: " + err.message);
       console.error(err);
@@ -35,7 +38,7 @@ export default function LoginPage() {
       const provider = new GoogleAuthProvider();
       await signInWithPopup(auth, provider);
       toast.success("Logged in with Google!");
-      router.push("/");
+      router.push(redirect);
     } catch (err: any) {
       toast.error("Google login failed: " + err.message);
       console.error(err);
