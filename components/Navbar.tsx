@@ -84,7 +84,7 @@ export default function Navbar() {
                     href="/dashboard/manage-event"
                     className="block px-3 py-2 hover:bg-[#FFC4C4] transition-all hover:text-[#850E35] rounded"
                   >
-                    Manage Event
+                    Manage Events
                   </Link>
                   <button
                     onClick={handleLogout}
