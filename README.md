@@ -90,23 +90,23 @@ Note: All protected routes require the user to be authenticated. Non-authenticat
 
 ### Technologies Used
 
-- Next.js 16 – React framework for server-side rendering and static site generation
+- *Next.js 16* – React framework for server-side rendering and static site generation
 
-- React 19 – Frontend library for building UI
+- *React 19* – Frontend library for building UI
 
-- Firebase 12 – Authentication and real-time services
+- *Firebase 12* – Authentication and real-time services
 
-- MongoDB 7 – Database for storing events
+- *MongoDB 7* – Database for storing events
 
-- Tailwind CSS 4 – Styling framework
+- *Tailwind CSS 4* – Styling framework
 
-- React Hot Toast – Notifications
+- *React Hot Toast* – Notifications
 
-- SweetAlert2 – Interactive alert modals
+- *SweetAlert2* – Interactive alert modals
 
-- Swiper – Slider/Carousel components
+- *Swiper* – Slider/Carousel components
 
-- Framer Motion – Animations
+- *Framer Motion* – Animations
 
 ---
 
