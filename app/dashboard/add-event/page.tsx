@@ -209,13 +209,15 @@ export default function EventsDashboard() {
       else setUser(firebaseUser);
       setCheckingAuth(false);
     });
+    console.log(user);
+    
     return () => unsubscribe();
-  }, [router]);
+  }, [router, user]);
 
   useEffect(() => {
     fetch("/api/events")
       .then((res) => res.json())
-      .then((data: any[]) => {
+      .then((data: EventItem[]) => {
         // Ensure _id is string
         const formatted = data.map((e) => ({ ...e, _id: String(e._id) }));
         setEvents(formatted);
