@@ -57,7 +57,7 @@ const ItemPage = async ({ params }: Props) => {
     return (
      <ItemNotFound></ItemNotFound>
     );
-console.log(relatedEvents)
+// console.log(relatedEvents)
   return (
     <div className="bg-[#FCF5EE] min-h-screen p-6 md:p-10">
       <div className="max-w-6xl mx-auto">

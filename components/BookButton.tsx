@@ -1,5 +1,7 @@
 "use client";
 
+import { useAuth } from "@/context/AuthContext";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 interface BookNowButtonProps {
@@ -7,12 +9,16 @@ interface BookNowButtonProps {
   eventTitle: string;
 }
 
-export default function BookNowButton({ eventId, eventTitle }: BookNowButtonProps) {
+export default function BookNowButton({ eventTitle }: BookNowButtonProps) {
   const [booked, setBooked] = useState(false);
+   const { user } = useAuth();
+  const router = useRouter();
 
   const handleBooking = () => {
-    // Here you can call an API to register/book for this event
-    // For now, we simulate booking
+    if (!user) {
+      router.push("/login");
+      return;
+    }
     setBooked(true);
   };
 
