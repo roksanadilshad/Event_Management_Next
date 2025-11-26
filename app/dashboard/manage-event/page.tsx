@@ -184,7 +184,7 @@ export default function Dashboard() {
           className="py-2 px-6 bg-[#EE6983] text-white font-semibold rounded-lg shadow hover:bg-[#d94f6b] transition"
           onClick={() => router.push("/dashboard/add-product")}
         >
-          Add Product
+          Add Event
         </button>
       </div>
 
