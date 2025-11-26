@@ -19,7 +19,7 @@ interface Item {
 
 async function getItem(id: string): Promise<Item | null> {
   try {
-    const res = await fetch(`/api/items/${id}`);
+    const res = await fetch(`https://event-management-next-fscg.vercel.app/api/items/${id}`);
     if (!res.ok) return null;
     return await res.json();
   } catch (error: unknown) {
@@ -35,7 +35,7 @@ async function getItem(id: string): Promise<Item | null> {
 
 async function getRelatedItems(currentId: string): Promise<Item[]> {
   try {
-    const res = await fetch(`/api/items`);
+    const res = await fetch(`https://event-management-next-fscg.vercel.app/api/items`);
     const data: Item[] = await res.json();
     return data.filter((item) => item._id !== currentId).slice(0, 3);
   } catch (error) {
