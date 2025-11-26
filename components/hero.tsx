@@ -33,6 +33,7 @@ const slides = [
 
 export default function Hero() {
    const [activeIndex, setActiveIndex] = useState(0);
+   
   return (
     <>
     <div className="bg-[#FCF5EE]">
@@ -50,7 +51,7 @@ export default function Hero() {
           </p>
           <div className="flex justify-center md:justify-start gap-4">
             <Link
-              href="/items"
+              href="/dashboard/add-event"
               className="px-6 py-3 bg-[#EE6983] text-[#FCF5EE] font-semibold rounded-md shadow-md hover:text-gray-100 hover:bg-[#FFC4C4] transition"
             >
               Get Started
@@ -62,7 +63,6 @@ export default function Hero() {
               Browse Events
             </Link>
           </div>
-          
         </div>
 
         {/* Banner Slider */}
@@ -182,7 +182,7 @@ export default function Hero() {
           <h2 className="text-3xl md:text-4xl font-bold mb-6">Start Managing Your Events Today</h2>
           <p className="text-lg md:text-xl mb-8">Join thousands of organizers using our platform to simplify event management.</p>
           <Link
-            href="/register"
+            href="/dashboard/add-event"
             className="px-8 py-4 bg-white text-[#EE6983] font-semibold rounded-md shadow hover:bg-[#850E35] hover:text-[#FCF5EE] transition"
           >
             Get Started

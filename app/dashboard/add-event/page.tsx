@@ -37,6 +37,7 @@ function AddEventForm({ onAdd }: { onAdd: (event: EventItem) => void }) {
   const [category, setCategory] = useState("");
   const [priority, setPriority] = useState("");
   const router = useRouter();
+ 
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
