@@ -3,10 +3,12 @@
 import { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { motion } from "framer-motion";
+import { useAuth } from "@/context/AuthContext";
 
 export default function ContactPage() {
      const [form, setForm] = useState({ name: "", email: "", message: "" });
   const [loading, setLoading] = useState(false);
+  const {user} = useAuth();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -31,7 +33,7 @@ export default function ContactPage() {
       } else {
         toast.error(data.error || "Failed to send message");
       }
-    } catch (err) {
+    } catch {
       toast.error("Something went wrong");
     } finally {
       setLoading(false);
@@ -44,7 +46,7 @@ export default function ContactPage() {
       <section className="bg-[#EE6983] text-white py-20 px-6 text-center">
         <h1 className="text-4xl md:text-5xl font-bold mb-4">Contact Evenify</h1>
         <p className="text-lg md:text-xl max-w-2xl mx-auto">
-          Have questions or feedback? We’d love to hear from you. Reach out and our team will respond promptly.
+          Have questions or feedback? We would love to hear from you. Reach out and our team will respond promptly.
         </p>
       </section>
 
@@ -63,9 +65,10 @@ export default function ContactPage() {
               <input
                 type="text"
                 name="name"
-                value={form.name}
+                
+                defaultValue={user?.displayName ?? ""}
                 onChange={handleChange}
-                placeholder="Your Name"
+               placeholder="Enter Your Name"
                 className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#EE6983]"
                 required
               />
@@ -75,9 +78,9 @@ export default function ContactPage() {
               <input
                 type="email"
                 name="email"
-                value={form.email}
+                defaultValue={user?.email ?? ""}
                 onChange={handleChange}
-                placeholder="you@example.com"
+                placeholder="Enter Your Email"
                 className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#EE6983]"
                 required
               />

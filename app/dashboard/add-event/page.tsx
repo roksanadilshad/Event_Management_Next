@@ -157,7 +157,7 @@ function AddEventForm({ onAdd }: { onAdd: (event: EventItem) => void }) {
             className="w-full p-3 border-2 border-[#EE6983] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#EE6983]"
           />
           <input
-            type="text"
+            type="time"
             placeholder="Time (e.g., 09:00 AM - 05:00 PM)"
             value={time}
             onChange={(e) => setTime(e.target.value)}
