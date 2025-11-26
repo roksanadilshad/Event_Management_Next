@@ -1,0 +1,20 @@
+[
+  {
+    "title": "Event 1",
+    "shortDesc": "Short description 1",
+    "fullDesc": "Full description 1",
+    "price": "50",
+    "image": "https://via.placeholder.com/400",
+    "createdBy": "testUserId",
+    "createdAt": "2025-11-24T00:00:00.000Z"
+  },
+  {
+    "title": "Event 2",
+    "shortDesc": "Short description 2",
+    "fullDesc": "Full description 2",
+    "price": "60",
+    "image": "https://via.placeholder.com/400",
+    "createdBy": "testUserId",
+    "createdAt": "2025-11-24T00:00:00.000Z"
+  }
+]
