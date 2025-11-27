@@ -216,16 +216,18 @@ export default function EventsDashboard() {
   }, [router, user]);
 
   useEffect(() => {
-    fetch("/api/events")
-      .then((res) => res.json())
-      .then((data: EventItem[]) => {
-        // Ensure _id is string
-        const formatted = data.map((e) => ({ ...e, _id: String(e._id) }));
-        setEvents(formatted);
-        setFilteredEvents(formatted);
-      })
-      .catch(console.error);
-  }, []);
+  if (!user) return;
+
+  fetch(`/api/events?userId=${user.uid}`)
+    .then((res) => res.json())
+    .then((data: EventItem[]) => {
+      const formatted = data.map((e) => ({ ...e, _id: String(e._id) }));
+      setEvents(formatted);
+      setFilteredEvents(formatted);
+    })
+    .catch(console.error);
+}, [user]);
+
 
   const isValidUrl = (url?: string) => {
     try {
