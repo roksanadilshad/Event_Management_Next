@@ -2,7 +2,12 @@
 
 import { useState } from "react";
 import { auth } from "@/lib/firebase";
-import { createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  GoogleAuthProvider,
+  signInWithPopup,
+  updateProfile,
+} from "firebase/auth";
 import { useRouter } from "next/navigation";
 import toast, { Toaster } from "react-hot-toast";
 import { motion } from "framer-motion";
@@ -11,6 +16,8 @@ import { FcGoogle } from "react-icons/fc";
 export default function RegisterPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
@@ -18,7 +25,14 @@ export default function RegisterPage() {
     e.preventDefault();
     setLoading(true);
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
+      const userCred = await createUserWithEmailAndPassword(auth, email, password);
+
+      // Update profile with name + image
+      await updateProfile(userCred.user, {
+        displayName: name,
+        photoURL: imageUrl || null,
+      });
+
       toast.success("Account created successfully!");
       router.push("/");
     } catch (err: any) {
@@ -56,7 +70,6 @@ export default function RegisterPage() {
         transition={{ duration: 15, repeat: Infinity, repeatType: "reverse" }}
       />
 
-      {/* Floating shapes */}
       <div className="absolute top-10 left-10 w-32 h-32 bg-[#EE6983]/30 rounded-full blur-3xl animate-pulse-slow"></div>
       <div className="absolute bottom-20 right-20 w-48 h-48 bg-[#850E35]/20 rounded-full blur-3xl animate-pulse-slow"></div>
 
@@ -74,7 +87,7 @@ export default function RegisterPage() {
           disabled={loading}
           className="w-full py-3 mb-4 bg-[#EE6983] text-[#FCF5EE] font-semibold rounded-xl shadow-md hover:bg-[#d94f6b] transition transform hover:scale-105 flex items-center justify-center gap-3"
         >
-          <FcGoogle></FcGoogle>
+          <FcGoogle />
           Sign up with Google
         </button>
 
@@ -87,21 +100,40 @@ export default function RegisterPage() {
         {/* Email Registration Form */}
         <form onSubmit={handleRegister} className="space-y-4">
           <input
+            type="text"
+            placeholder="Full Name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className="w-full p-3 border-2 border-[#EE6983] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#EE6983]"
+            required
+          />
+
+          <input
+            type="text"
+            placeholder="Profile Image URL (optional)"
+            value={imageUrl}
+            onChange={(e) => setImageUrl(e.target.value)}
+            className="w-full p-3 border-2 border-[#EE6983] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#EE6983]"
+          />
+
+          <input
             type="email"
-            placeholder="Email"
+            placeholder="Email Address"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             className="w-full p-3 border-2 border-[#EE6983] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#EE6983]"
             required
           />
+
           <input
             type="password"
-            placeholder="Password"
+            placeholder="Password (min 6 characters)"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             className="w-full p-3 border-2 border-[#EE6983] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#EE6983]"
             required
           />
+
           <button
             type="submit"
             disabled={loading}
@@ -119,12 +151,17 @@ export default function RegisterPage() {
         </p>
       </motion.div>
 
-      {/* Animations CSS */}
       <style jsx>{`
         @keyframes gradient-x {
-          0% { background-position: 0% 0%; }
-          50% { background-position: 100% 100%; }
-          100% { background-position: 0% 0%; }
+          0% {
+            background-position: 0% 0%;
+          }
+          50% {
+            background-position: 100% 100%;
+          }
+          100% {
+            background-position: 0% 0%;
+          }
         }
         .animate-gradient-x {
           background-size: 400% 400%;
