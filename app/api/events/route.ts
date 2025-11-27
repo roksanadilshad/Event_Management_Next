@@ -6,16 +6,18 @@ export async function GET(req: Request) {
     const client = await clientPromise;
     const db = client.db("eventsDB");
 
-   const { searchParams } = new URL(req.url);
+    const { searchParams } = new URL(req.url);
     const userId = searchParams.get("userId");
 
+    // If no userId → return empty array
     if (!userId) {
       return NextResponse.json([], { status: 200 });
     }
 
+    // FIXED → FILTER BY USER
     const products = await db
       .collection("newEvent")
-      .find()
+      .find({ userId }) // ← added filter
       .sort({ createdAt: -1 })
       .toArray();
 
@@ -41,13 +43,13 @@ export async function POST(req: Request) {
 
     const newEvent = {
       title: body.title,
-      shortDescription: body.shortDesc,       // FIX
-      fullDescription: body.fullDesc,         // FIX
+      shortDescription: body.shortDesc,
+      fullDescription: body.fullDesc,
       date: body.date,
       time: body.time,
       location: body.location,
       category: body.category,
-      image: body.image,                   // FIX
+      image: body.image,
       price: Number(body.price),
       priority: body.priority,
       userId: body.userId,

@@ -55,10 +55,12 @@ export default function Dashboard() {
     return () => unsubscribe();
   }, [router]);
 
-  // Fetch products
+  // Fetch products — FIXED to include userId
   const fetchProducts = () => {
+    if (!user) return;
+
     setLoading(true);
-    fetch("/api/events")
+    fetch(`/api/events?userId=${user.uid}`)
       .then((res) => res.json())
       .then((data) => {
         setProducts(data);
@@ -71,59 +73,54 @@ export default function Dashboard() {
       });
   };
 
- useEffect(() => {
-  const loadProducts = async () => {
+  useEffect(() => {
     if (!checkingAuth && user) {
-      await fetchProducts();
+      fetchProducts();
     }
-  };
-
-  loadProducts();
-}, [checkingAuth, user]);
+  }, [checkingAuth, user]);
 
   if (checkingAuth)
-    return <div className="flex justify-center py-40 items-center">
-  <HashLoader
-  color="#FFC4C4"
-  size={100}
-/>
-    </div>
+    return (
+      <div className="flex justify-center py-40 items-center">
+        <HashLoader color="#FFC4C4" size={100} />
+      </div>
+    );
+
   if (loading)
-    return <div className="flex justify-center py-40 items-center">
-  <HashLoader
-  color="#FFC4C4"
-  size={100}
-/>
-    </div>
+    return (
+      <div className="flex justify-center py-40 items-center">
+        <HashLoader color="#FFC4C4" size={100} />
+      </div>
+    );
 
   const handleDelete = async (id: string) => {
-  const result = await Swal.fire({
-    title: "Are you sure?",
-    text: "You won't be able to revert this!",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#850E35",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Yes, delete it!",
-  });
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#850E35",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    });
 
-  if (result.isConfirmed) {
-    try {
-      const res = await fetch(`/api/events/${id}`, { method: "DELETE" });
-      const data = await res.json();
+    if (result.isConfirmed) {
+      try {
+        const res = await fetch(`/api/events/${id}`, { method: "DELETE" });
+        const data = await res.json();
 
-      if (data.success) {
-        toast.success("Product deleted!");
-        fetchProducts(); // refresh list
-      } else {
-        toast.error("Failed to delete");
+        if (data.success) {
+          toast.success("Product deleted!");
+          fetchProducts();
+        } else {
+          toast.error("Failed to delete");
+        }
+      } catch (err) {
+        console.error(err);
+        toast.error("Error deleting product");
       }
-    } catch (err) {
-      console.error(err);
-      toast.error("Error deleting product");
     }
-  }
-};
+  };
 
   const openEditModal = (product: Product) => {
     setEditingProduct(product);
@@ -157,15 +154,18 @@ export default function Dashboard() {
           location: editLocation,
           category: editCategory,
           priority: editPriority,
-          date: editingProduct.date,
+          date: editingProduct.date, // unchanged — you said do NOT modify existing logic
         }),
       });
+
       const data = await res.json();
       if (data.success) {
         toast.success("Product updated!");
         setEditingProduct(null);
         fetchProducts();
-      } else toast.error("Failed to update product");
+      } else {
+        toast.error("Failed to update product");
+      }
     } catch (err) {
       console.error(err);
       toast.error("Error updating product");
@@ -176,10 +176,8 @@ export default function Dashboard() {
     <div className="min-h-screen p-6 bg-[#FCF5EE] text-[#850E35]">
       {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-center mb-6">
-        <div className="text-center">
-        <h1 className="text-3xl  font-bold mb-4 md:mb-0">Dashboard</h1>
+        <h1 className="text-3xl font-bold mb-4 md:mb-0">Dashboard</h1>
 
-        </div>
         <button
           className="py-2 px-6 bg-[#EE6983] text-white font-semibold rounded-lg shadow hover:bg-[#d94f6b] transition"
           onClick={() => router.push("/dashboard/add-product")}
@@ -199,16 +197,19 @@ export default function Dashboard() {
               className="bg-[#FFC4C4] rounded-xl shadow-lg overflow-hidden transition hover:shadow-2xl"
             >
               {product.image && (
-  <Image
-    src={product.image.startsWith("http")
-      ? product.image
-      : `/images/${product.image}`} // if stored in public/images
-    alt={product.title || "Product Image"}
-    width={600}
-    height={400}
-    className="object-cover rounded-md"
-  />
-)}
+                <Image
+                  src={
+                    product.image.startsWith("http")
+                      ? product.image
+                      : `/images/${product.image}`
+                  }
+                  alt={product.title || "Product Image"}
+                  width={600}
+                  height={400}
+                  className="object-cover rounded-md"
+                />
+              )}
+
               <div className="p-4">
                 <h2 className="text-xl font-bold mb-1">{product.title}</h2>
                 <p className="text-[#850E35] mb-2 line-clamp-2">{product.shortDescription}</p>
@@ -216,6 +217,7 @@ export default function Dashboard() {
                 <p className="text-sm text-[#850E35]/70">
                   Added on: {new Date(product.createdAt).toLocaleDateString()}
                 </p>
+
                 <div className="flex gap-2 mt-4">
                   <button
                     className="flex-1 py-2 bg-[#EE6983] text-white font-medium rounded-lg hover:bg-[#d94f6b] transition"
@@ -241,6 +243,7 @@ export default function Dashboard() {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-[#FCF5EE] p-6 rounded-2xl shadow-2xl max-w-md w-full relative">
             <h2 className="text-2xl font-bold mb-4">Edit Product</h2>
+
             <form className="space-y-4" onSubmit={handleEditSubmit}>
               <input
                 type="text"
@@ -250,6 +253,7 @@ export default function Dashboard() {
                 placeholder="Title"
                 required
               />
+
               <input
                 type="text"
                 value={editShortDesc}
@@ -258,14 +262,16 @@ export default function Dashboard() {
                 placeholder="Short Description"
                 required
               />
+
               <textarea
                 value={editFullDesc}
                 onChange={(e) => setEditFullDesc(e.target.value)}
                 className="w-full p-3 border-2 border-[#EE6983] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#EE6983]"
-                placeholder="Full Description"
                 rows={4}
+                placeholder="Full Description"
                 required
               />
+
               <input
                 type="number"
                 value={editPrice}
@@ -274,6 +280,7 @@ export default function Dashboard() {
                 placeholder="Price"
                 required
               />
+
               <input
                 type="text"
                 value={editImageUrl}
@@ -281,6 +288,7 @@ export default function Dashboard() {
                 className="w-full p-3 border-2 border-[#EE6983] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#EE6983]"
                 placeholder="Image URL (optional)"
               />
+
               <input
                 type="text"
                 value={editTime}
@@ -288,13 +296,14 @@ export default function Dashboard() {
                 className="w-full p-3 border-2 border-[#EE6983] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#EE6983]"
                 placeholder="Time"
               />
+
               <input
                 type="date"
                 value={editDate}
                 onChange={(e) => setEditDate(e.target.value)}
                 className="w-full p-3 border-2 border-[#EE6983] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#EE6983]"
-                placeholder="Date"
               />
+
               <input
                 type="text"
                 value={editLocation}
@@ -302,6 +311,7 @@ export default function Dashboard() {
                 className="w-full p-3 border-2 border-[#EE6983] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#EE6983]"
                 placeholder="Location"
               />
+
               <input
                 type="text"
                 value={editCategory}
@@ -309,6 +319,7 @@ export default function Dashboard() {
                 className="w-full p-3 border-2 border-[#EE6983] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#EE6983]"
                 placeholder="Category"
               />
+
               <input
                 type="text"
                 value={editPriority}
@@ -316,6 +327,7 @@ export default function Dashboard() {
                 className="w-full p-3 border-2 border-[#EE6983] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#EE6983]"
                 placeholder="Priority"
               />
+
               <div className="flex gap-2 mt-2">
                 <button
                   type="submit"
@@ -323,6 +335,7 @@ export default function Dashboard() {
                 >
                   Save
                 </button>
+
                 <button
                   type="button"
                   className="flex-1 py-2 bg-[#850E35] text-white font-semibold rounded-lg hover:bg-[#6a0c2a] transition"
